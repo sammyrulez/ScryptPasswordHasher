@@ -10,7 +10,7 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
     maxtime=0.5
     std_length = 64
 
-    def _randstr(length):
+    def _randstr(self,length):
         return ''.join(chr(random.randint(0,255)) for i in range(length))
 
     def salt(self):

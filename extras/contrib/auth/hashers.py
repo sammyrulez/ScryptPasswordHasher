@@ -30,6 +30,15 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         data =  scrypt.encrypt(salt, password, maxtime=self.maxtime)
         return "%s$%s" % (self.algorithm, data)
 
+    def verify(self, password, encoded):
+        algorithm, data = encoded.split('$', 1)
+        assert algorithm == self.algorithm
+        scrypt = self._load_library()
+        try:
+            scrypt.decrypt(data, password, self.maxtime)
+            return True
+        except scrypt.error:
+            return False
 
     def safe_summary(self, encoded):
         """

@@ -50,6 +50,9 @@ class TestSCryptPasswordHasher(unittest.TestCase):
          self.assertTrue(self.hasher.algorithm in out_psw)
          self.assertTrue('$' in out_psw)
 
+    def test_verify(self):
+        pass
+
 
 
 if __name__ == '__main__':

@@ -18,7 +18,7 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         Generates a cryptographically secure nonce salt in ascii
         """
         scrypt = self._load_library()
-        return _randstr(self.std_length)
+        return self._randstr(self.std_length)
 
     def encode(self, password, salt):
         """

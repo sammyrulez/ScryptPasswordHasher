@@ -1,6 +1,8 @@
 
 from django.contrib.auth import hashers
+rom django.utils.crypto import constant_time_compare
 import random
+
 
 class SCryptPasswordHasher(hashers.BasePasswordHasher):
     """SCryptPasswordHasher for django authentication"""
@@ -8,7 +10,7 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
     algorithm = "scrypt"
     library = ("scrypt", "scrypt",)
     maxtime=0.5
-    std_length = 64
+    std_length = 32
 
     def _randstr(self,length):
         return ''.join(chr(random.randint(0,255)) for i in range(length))
@@ -27,18 +29,14 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         must be fewer than 128 characters.
         """
         scrypt = self._load_library()
-        data =  scrypt.encrypt(salt, password, maxtime=self.maxtime)
-        return "%s$%s" % (self.algorithm, data)
+        data =  scrypt.hash(password,salt )
+        return "%s$%d$%s$%s" % (self.algorithm, self.maxtime, salt, data)
 
     def verify(self, password, encoded):
-        algorithm, data = encoded.split('$', 1)
+        algorithm, local_maxtime, salt, data = encoded.split('$', 3)
         assert algorithm == self.algorithm
         scrypt = self._load_library()
-        try:
-            scrypt.decrypt(data, password, self.maxtime)
-            return True
-        except scrypt.error:
-            return False
+        return constant_time_compare(data,scrypt.hash(password,salt ))
 
     def safe_summary(self, encoded):
         """
@@ -47,12 +45,11 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         The result is a dictionary and will be used where the password field
         must be displayed to construct a safe representation of the password.
         """
-        algorithm, empty, algostr, maxtime, data = encoded.split('$', 4)
+        algorithm, local_maxtime, salt, data = encoded.split('$', 3)
         assert algorithm == self.algorithm
-        salt, checksum = data[:22], data[22:]
         return SortedDict([
             (_('algorithm'), algorithm),
-            (_('maxtime'), maxtime),
+            (_('maxtime'), local_maxtime),
             (_('salt'), mask_hash(salt)),
-            (_('checksum'), mask_hash(checksum)),
+            (_('checksum'), mask_hash(data)),
         ])

@@ -21,6 +21,11 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         return _randstr(self.std_length)
 
     def encode(self, password, salt):
+        """
+        Creates an encoded database value
+        The result is normally formatted as "algorithm$salt$hash" and
+        must be fewer than 128 characters.
+        """
         scrypt = self._load_library()
         data =  scrypt.encrypt(salt, password, maxtime=self.maxtime)
         return "%s$%s" % (self.algorithm, data)

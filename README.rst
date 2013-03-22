@@ -13,7 +13,7 @@ This module enable the use of `scrypt <http://en.wikipedia.org/wiki/Scrypt>`_ al
 
 1 install this module
 
-2 Add  **SCryptPasswordHasher** as the first entry in `PASSWORD_HASHERS <https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-PASSWORD_HASHERS>`:
+2 Add  **SCryptPasswordHasher** as the first entry in `PASSWORD_HASHERS <https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-PASSWORD_HASHERS>`_:
 
 PASSWORD_HASHERS = (
     'extras.contrib.auth.hashers.SCryptPasswordHasher',
@@ -27,6 +27,4 @@ PASSWORD_HASHERS = (
 
 
 
-It uses
-
-`scrypt <https://pypi.python.org/pypi/scrypt/>`_ python package by  Magnus Hallin
+It uses `scrypt <https://pypi.python.org/pypi/scrypt/>`_ python package by  Magnus Hallin

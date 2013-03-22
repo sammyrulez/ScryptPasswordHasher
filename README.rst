@@ -3,7 +3,7 @@ SCryptPasswordHasher for django authentication
 ##############################################
 
 
-image:: https://travis-ci.org/sammyrulez/ScryptPasswordHasher.png?branch=master
+.. image:: https://travis-ci.org/sammyrulez/ScryptPasswordHasher.png?branch=master
 
 Django provides a flexible password storage system and uses PBKDF2 by default.
 
@@ -13,10 +13,10 @@ This module enable the use of `scrypt <http://en.wikipedia.org/wiki/Scrypt>`_ al
 
 1 install this module
 
-2 Add  **SCryptPasswordHasher** as the first entry in PASSWORD_HASHERS:
+2 Add  **SCryptPasswordHasher** as the first entry in `PASSWORD_HASHERS <https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-PASSWORD_HASHERS>`:
 
 PASSWORD_HASHERS = (
-    'myproject.hashers.MyPBKDF2PasswordHasher',
+    'extras.contrib.auth.hashers.SCryptPasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',

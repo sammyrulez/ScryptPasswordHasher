@@ -1,6 +1,6 @@
 
 from django.contrib.auth import hashers
-rom django.utils.crypto import constant_time_compare
+from django.utils.crypto import constant_time_compare
 import random
 
 

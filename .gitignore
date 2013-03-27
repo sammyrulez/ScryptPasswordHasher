@@ -28,3 +28,20 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 env_scry
+
+# Eclipse #
+###########
+*.pydevproject
+#.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+#.classpath
+.settings/
+.loadpath

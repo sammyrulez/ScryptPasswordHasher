@@ -1,6 +1,8 @@
 
 from django.contrib.auth import hashers
 from django.utils.crypto import constant_time_compare
+from django.utils.encoding import force_bytes, force_str
+from django.utils.datastructures import SortedDict
 import random
 
 
@@ -29,14 +31,14 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         must be fewer than 128 characters.
         """
         scrypt = self._load_library()
-        data =  scrypt.hash(password,salt )
+        data =  force_str(scrypt.hash(force_bytes(password),salt ))
         return "%s$%d$%s$%s" % (self.algorithm, self.maxtime, salt, data)
 
     def verify(self, password, encoded):
         algorithm, local_maxtime, salt, data = encoded.split('$', 3)
         assert algorithm == self.algorithm
         scrypt = self._load_library()
-        return constant_time_compare(data,scrypt.hash(password,salt ))
+        return constant_time_compare(data,force_str(scrypt.hash(force_bytes(password),salt )))
 
     def safe_summary(self, encoded):
         """
@@ -50,6 +52,6 @@ class SCryptPasswordHasher(hashers.BasePasswordHasher):
         return SortedDict([
             (_('algorithm'), algorithm),
             (_('maxtime'), local_maxtime),
-            (_('salt'), mask_hash(salt)),
-            (_('checksum'), mask_hash(data)),
+            (_('salt'), hashers.mask_hash(salt)),
+            (_('checksum'), hashers.mask_hash(data)),
         ])
